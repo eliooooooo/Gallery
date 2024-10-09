@@ -46,7 +46,7 @@
                 <div class="bg-secondary rounded p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
                     <h2 class="col-span-full text-xl font-bold text-primary">Photos <span>(</span><span x-text="albumDetails.pictures.length ? albumDetails.pictures.length : 0"></span><span> éléments )</span></h2>
                     <template x-for="picture in albumDetails.pictures">
-                        <div class="col-span-1 aspect-square relative group" @click="setLightbox(picture.url)">
+                        <div class="col-span-1 aspect-square relative group" @click="setLightbox(picture.url, picture.legend)">
                             <img :src="picture.url" :alt="picture.legend" class="w-full h-full object-cover rounded">
                             <div class="absolute rounded bg-black/50 w-full h-full top-0 left-0 hidden group-hover:block cursor-pointer"></div>
                             <p class="absolute cursor-pointer w-full p-4 text-white top-1/2 left-1/2 text-center -translate-x-1/2 -translate-y-1/2 hidden group-hover:inline-block" x-text="picture.legend"></p>
@@ -60,7 +60,10 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="cursor-pointer bi bi-x-lg ml-auto mr-4 text-white" viewBox="0 0 16 16" x-cloak @click="lightboxOpen = false">
                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
             </svg>
-            <img :src="imageUrl" class="mx-auto max-w-full max-h-full" alt="Image en plein écran">
+            <div class="flex flex-col gap-0 items-center justify-center bg-secondary">
+                <img :src="imageUrl" class="mx-auto max-w-full max-h-full" alt="Image en plein écran">
+                <p x-text="imageDesc" class="w-full text-center text-primary px-3 py-2"></p>
+            </div>
         </div>
 
         <footer class="w-full absolute bottom-0">
@@ -74,6 +77,7 @@
                 asideOpen: true,
                 lightboxOpen: false,
                 imageUrl: '',
+                imageDesc: '',
                 albums: [],
                 albumDetails: {},
                 init() {
@@ -100,8 +104,9 @@
                             this.albumDetails = data.album;
                         });
                 },
-                setLightbox(imageUrl) {
+                setLightbox(imageUrl, desc) {
                     this.imageUrl = imageUrl;
+                    this.imageDesc = desc;
                     this.lightboxOpen = true;
                 },
                 updateUrl(id){

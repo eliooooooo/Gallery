@@ -8,7 +8,7 @@
     <link href="./../src/output.css" rel="stylesheet">
     <title>Eliott's gallery</title>
 </head>
-<body x-init="getAlbums()" x-data="Albums()" @keydown.escape="lightboxOpen = false">
+<body x-init="getAlbums()" x-data="Albums()" @keydown.escape="lightboxOpen = false" @scroll.window="atTop = (window.pageYOffset < 50) ? true: false">
     <header class="flex flex-col md:flex-row gap-4 md:gap-10 items-center bg-primary text-white px-10 py-6 h-32 md:h-20">
         <div class="w-full md:w-auto flex flex-row items-center justify-start gap-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="cursor-pointer bi bi-list" viewBox="0 0 16 16" x-show="!asideOpen" @click="asideOpen = true" x-cloak>
@@ -25,8 +25,11 @@
         </div>
     </header>
     <main class="relative flex flex-row items-stretch min-h-[calc(100ch-8rem)] md:min-h-[calc(100vh-5rem)] bg-secondary-light">
-        <aside class="bg-primary-light pt-8 px-3 md:px-6 w-40 md:w-60" x-show="asideOpen" x-cloak>
-            <div class="flex flex-col gap-6"> <!--  fixed top-24 -->
+        <aside class="bg-primary-light pt-8 px-3 md:px-6 w-40 md:w-60 absolute h-full sm:h-auto sm:relative z-20" x-show="asideOpen" x-cloak>
+            <div class="flex flex-col gap-6 sticky top-10">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="cursor-pointer bi bi-x-lg ml-auto mr-4" :class="atTop ? 'hidden' : 'block'" viewBox="0 0 16 16" x-show="asideOpen" @click="asideOpen = false" x-cloak>
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                </svg>
                 <h2 class="text-xl font-bold">Albums</h2>
                 <ul class="flex flex-col gap-2 [&>li>a]:underline">
                     <template x-for="(album, index) in albums">
@@ -44,7 +47,7 @@
                     <p x-text="albumDetails.description"></p>
                 </header>
                 <div class="bg-secondary rounded p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-                    <h2 class="col-span-full text-xl font-bold text-primary">Photos <span>(</span><span x-text="albumDetails.pictures.length ? albumDetails.pictures.length : 0"></span><span> éléments )</span></h2>
+                    <h2 class="col-span-full text-xl font-bold text-primary">Photos <span>(</span><span x-text="albumDetails.pictures ? albumDetails.pictures.length : 0"></span><span> éléments )</span></h2>
                     <template x-for="picture in albumDetails.pictures">
                         <div class="col-span-1 aspect-square relative group" @click="setLightbox(picture.url, picture.legend)">
                             <img :src="picture.url" :alt="picture.legend" class="w-full h-full object-cover rounded">
@@ -66,7 +69,7 @@
             </div>
         </div>
 
-        <footer class="w-full absolute bottom-0">
+        <footer class="w-full absolute bottom-0 z-30">
             <p class="text-center bg-primary text-white py-4 px-6 w-full">Copyright © 2024 Eliott's gallery - Développé par Eliott BURKLE</p>
         </footer>
     </main>
@@ -74,6 +77,7 @@
     <script>
         function Albums() {
             return {
+                atTop: true,
                 asideOpen: true,
                 lightboxOpen: false,
                 imageUrl: '',

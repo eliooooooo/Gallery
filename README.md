@@ -5,7 +5,7 @@ Voici les étapes à suivre pour installer le projet :
   
 - Cloner le projet git ou décomprésser l'archive.  
 ```bash
-git clone ...
+git clone https://github.com/eliooooooo/Gallery.git
 ```  
 
 - Installer les dépendances  

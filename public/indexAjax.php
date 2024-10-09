@@ -9,7 +9,7 @@
     <title>Eliott's gallery</title>
 </head>
 <body x-init="getAlbums()" x-data="Albums()" @keydown.escape="lightboxOpen = false">
-    <header class="flex flex-col md:flex-row gap-4 items-center bg-primary text-white px-10 py-6 h-32 md:h-20">
+    <header class="flex flex-col md:flex-row gap-4 md:gap-10 items-center bg-primary text-white px-10 py-6 h-32 md:h-20">
         <div class="w-full md:w-auto flex flex-row items-center justify-start gap-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="cursor-pointer bi bi-list" viewBox="0 0 16 16" x-show="!asideOpen" @click="asideOpen = true" x-cloak>
                 <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
@@ -20,12 +20,12 @@
             <h1 class="font-bold text-2xl select-none" >Eliott's&nbsp;gallery</h1>
         </div>
         <div class="search-bar flex flex-row gap-2 w-full">
-            <input type="text" placeholder="Search" class="border border-gray-300 px-2 py-1 w-full">
-            <button class="bg-blue-500 text-white px-2 py-1">Search</button>            
+            <input type="text" placeholder="Entrez votre recherche" class="border border-primary-light text-primary px-3 py-2 w-full rounded">
+            <button class="bg-secondary rounded text-primary px-3 py-2 hover:bg-primary-light hover:text-secondary-light transition">Rechercher</button>            
         </div>
     </header>
     <main class="relative flex flex-row items-stretch min-h-[calc(100ch-8rem)] md:min-h-[calc(100vh-5rem)] bg-secondary-light">
-        <aside class="bg-primary-light pt-8 px-6 w-40 md:w-60" x-show="asideOpen" x-cloak>
+        <aside class="bg-primary-light pt-8 px-3 md:px-6 w-40 md:w-60" x-show="asideOpen" x-cloak>
             <div class="flex flex-col gap-6"> <!--  fixed top-24 -->
                 <h2 class="text-xl font-bold">Albums</h2>
                 <ul class="flex flex-col gap-2 [&>li>a]:underline">
@@ -38,17 +38,18 @@
             </div>
         </aside>
         <div class="w-full px-6 py-8">
-            <article>
-                <header>
-                    <h1 x-text="albumDetails.name" ></h1>
+            <article class="mb-16 sm:mb-10">
+                <header class="mb-6">
+                    <h1 class="text-3xl font-bold text-primary-light" x-text="albumDetails.name" ></h1>
                     <p x-text="albumDetails.description"></p>
                 </header>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
+                <div class="bg-secondary rounded p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
+                    <h2 class="col-span-full text-xl font-bold text-primary">Photos <span>(</span><span x-text="albumDetails.pictures.length ? albumDetails.pictures.length : 0"></span><span> éléments )</span></h2>
                     <template x-for="picture in albumDetails.pictures">
                         <div class="col-span-1 aspect-square relative group" @click="setLightbox(picture.url)">
-                            <img :src="picture.url" :alt="picture.legend" class="w-full h-full object-cover">
-                            <div class="absolute bg-black/50 w-full h-full top-0 left-0 hidden group-hover:block"></div>
-                            <p class="absolute w-full p-4 text-white top-1/2 left-1/2 text-center -translate-x-1/2 -translate-y-1/2 hidden group-hover:inline-block" x-text="picture.legend"></p>
+                            <img :src="picture.url" :alt="picture.legend" class="w-full h-full object-cover rounded">
+                            <div class="absolute rounded bg-black/50 w-full h-full top-0 left-0 hidden group-hover:block cursor-pointer"></div>
+                            <p class="absolute cursor-pointer w-full p-4 text-white top-1/2 left-1/2 text-center -translate-x-1/2 -translate-y-1/2 hidden group-hover:inline-block" x-text="picture.legend"></p>
                         </div>
                     </template>
                 </div>
